@@ -419,6 +419,8 @@ namespace OkaneGames.AnythingBookmark.Editor
                 {
                     foreach (var target in removeList) RemoveBookmark(target);
                     SaveBookmarkList();
+                    if (_TabController.GetCurrentTabId() == Tab.Id.Fav) UpdateFavBookmarkList();
+                    else if (_TabController.GetCurrentTabId() != Tab.Id.Main) UpdateSubTabBookmarkList();
                 }
             }
             GUILayout.EndScrollView();
