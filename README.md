@@ -30,7 +30,7 @@ Features
 System Requirements
 -------------------
 - Required
-  - C# 6.0 or later
+  - Unity 2017.1 or later
 - Recommended
   - Unity 2020.1 or later
 

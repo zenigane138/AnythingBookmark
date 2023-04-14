@@ -1,7 +1,8 @@
 {
     "name": "com.okanegames.anythingbookmark",
-    "version": "1.0.0",
     "displayName": "AnythingBookmark",
+    "version": "1.0.1",
+    "unity": "2017.1",
     "description": "An editor extension window that allows you to bookmark not only assets, but also various other elements.",
     "author": {
         "name": "zenigane",
@@ -17,5 +18,6 @@
         "favorite",
         "browser"
     ],
-    "license": "MIT License"
+    "license": "MIT",
+    "dependencies": {}
 }

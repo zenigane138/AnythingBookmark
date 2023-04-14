@@ -29,7 +29,7 @@ https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-
 動作環境
 ---
 - 必須
-  - C# 6.0 以降
+  - Unity 2017.1 以降
 - 推奨
   - Unity 2020.1 以降
 
