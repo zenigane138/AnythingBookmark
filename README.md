@@ -7,7 +7,7 @@ Overview
 --------
 AnythingBookmark is an editor extension window that allows you to bookmark not only Unity assets but also various elements.  
 
-[![sample movie]](https://www.youtube.com/watch?v=90AzotPUc9g)  
+https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-b06e-f3053e5a24b4.mp4
 
 Elements that can be bookmarked
 -------------------------------
