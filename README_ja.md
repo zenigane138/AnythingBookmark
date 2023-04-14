@@ -6,7 +6,7 @@ The English version of README.md is available [here](/README.md).
 ---
 AnythingBookmark は Unity のアセットだけでなく様々な要素をブックマーク出来るエディタ拡張ウィンドウです。  
 
-https://user-images.githubusercontent.com/36072156/229339442-95001899-8b29-4bf7-89d8-5cffb9618a63.mp4"  
+[![sample movie]](https://www.youtube.com/watch?v=90AzotPUc9g)  
 
 登録可能な要素
 ---
