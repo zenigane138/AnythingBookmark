@@ -183,7 +183,7 @@ namespace OkaneGames.AnythingBookmark.Editor
                 var restoredIndex = _tabControllerCurrentIndexForRestore != -1 ? _tabControllerCurrentIndexForRestore : 0;
                 _TabController.ChangeIndexForce(restoredIndex);
                 _TabController.ChangeTab(_TabController.GetCurrentTabId());
-                if(_tabControllerCurrentIndexForRestore != -1) Debug.Log($"[{WindowTitle}] Restored!! index:{_tabControllerCurrentIndexForRestore}");
+                if(_tabControllerCurrentIndexForRestore != -1) Debug.Log("[" + WindowTitle + "] Restored!! index:" + _tabControllerCurrentIndexForRestore);
             }
 
             // タブ(Toolbar)の描画と結果受け取り
@@ -258,7 +258,8 @@ namespace OkaneGames.AnythingBookmark.Editor
                         BookmarkAsset(AssetDatabase.AssetPathToGUID(path));
                     }
                     // 外部ディレクトリ
-                    else if(File.GetAttributes(path).HasFlag(FileAttributes.Directory))
+                    //else if(File.GetAttributes(path).HasFlag(FileAttributes.Directory))
+                    else if ((File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
                     {
                         BookmarkExternalDirectory(path);
                     }
@@ -469,8 +470,8 @@ namespace OkaneGames.AnythingBookmark.Editor
                 if (GUILayout.Button(new GUIContent("！", "Highlighting asset."), GUILayout.ExpandWidth(false)))
                 {
                     var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(bookmark.path);
-                    if(asset != null) EditorGUIUtility.PingObject(asset);
-                    else Debug.Log($"[{WindowTitle}] Not found Asset. Path:{bookmark.path}");
+                    if (asset != null) EditorGUIUtility.PingObject(asset);
+                    else Debug.Log("[" + WindowTitle + "] Not found Asset. Path:" + bookmark.path);
                 }
 
                 var content = new GUIContent(bookmark.name, AssetDatabase.GetCachedIcon(bookmark.path), bookmark.path);
@@ -482,7 +483,7 @@ namespace OkaneGames.AnythingBookmark.Editor
 
                     var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(bookmark.path);
                     if (asset != null) OpenAsset(bookmark);
-                    else Debug.Log($"[{WindowTitle}] Not found Asset. Path:{bookmark.path}");
+                    else Debug.Log("[" + WindowTitle + "] Not found Asset. Path:" + bookmark.path);
                 }
             }
             else if (bookmark.type == Bookmark.Type.ExternalDir)
@@ -490,13 +491,13 @@ namespace OkaneGames.AnythingBookmark.Editor
                 ChangeBackgroundColor(Color.yellow);
                 var style = new GUIStyle(GUI.skin.button);
                 style.alignment = TextAnchor.MiddleLeft;
-                if (GUILayout.Button(new GUIContent(bookmark.path, $"{bookmark.path}\n\nLeft-Click:Open in associated applications.\nRight-Click:Copy path to clipboard."), style, GetMaxWidth(68)))
+                if (GUILayout.Button(new GUIContent(bookmark.path, bookmark.path + "\n\nLeft-Click:Open in associated applications.\nRight-Click:Copy path to clipboard."), style, GetMaxWidth(68)))
                 {
                     if (Event.current.button == 0)
                     {
                         OnClickBookmarkCommon(bookmark);
                         if (Directory.Exists(bookmark.path)) OpenExternalDirectory(bookmark.path);
-                        else Debug.Log($"[{WindowTitle}] Not found directory. Path:{bookmark.path}");
+                        else Debug.Log("[" + WindowTitle + "] Not found directory. Path:" + bookmark.path);
 
                     }
                     else if (Event.current.button == 1)
@@ -511,13 +512,13 @@ namespace OkaneGames.AnythingBookmark.Editor
                 ChangeBackgroundColor(Color.cyan);
                 var style = new GUIStyle(GUI.skin.button);
                 style.alignment = TextAnchor.MiddleLeft;
-                if (GUILayout.Button(new GUIContent(bookmark.path, $"{bookmark.path}\n\nLeft-Click:Open in associated applications.\nRight-Click:Copy path to clipboard."), style, GetMaxWidth(68)))
+                if (GUILayout.Button(new GUIContent(bookmark.path, bookmark.path + "\n\nLeft-Click:Open in associated applications.\nRight-Click:Copy path to clipboard."), style, GetMaxWidth(68)))
                 {
                     if (Event.current.button == 0)
                     {
                         OnClickBookmarkCommon(bookmark);
-                        if(File.Exists(bookmark.path)) OpenExternalFile(bookmark.path);
-                        else Debug.Log($"[{WindowTitle}] Not found file. Path:{bookmark.path}");
+                        if (File.Exists(bookmark.path)) OpenExternalFile(bookmark.path);
+                        else Debug.Log("[" + WindowTitle + "] Not found file. Path:" + bookmark.path);
                     }
                     else if (Event.current.button == 1)
                     {
@@ -531,13 +532,13 @@ namespace OkaneGames.AnythingBookmark.Editor
                 ChangeBackgroundColor(Color.green);
                 var style = new GUIStyle(GUI.skin.button);
                 style.alignment = TextAnchor.MiddleCenter;
-                if (GUILayout.Button(new GUIContent(bookmark.path, $"{bookmark.path}\n\nLeft-Click:Open window.\nRight-Click:Copy path to clipboard."), style, GetMaxWidth(68)))
+                if (GUILayout.Button(new GUIContent(bookmark.path, bookmark.path+"\n\nLeft-Click:Open window.\nRight-Click:Copy path to clipboard."), style, GetMaxWidth(68)))
                 {
                     if (Event.current.button == 0)
                     {
                         OnClickBookmarkCommon(bookmark);
                         var result = EditorApplication.ExecuteMenuItem(bookmark.path);
-                        if (!result) Debug.Log($"[{WindowTitle}] Not found Unity MenuItem path. Path:{bookmark.path}");
+                        if (!result) Debug.Log("[" + WindowTitle + "] Not found Unity MenuItem path. Path:" + bookmark.path);
                     }
                     else if (Event.current.button == 1)
                     {
@@ -551,7 +552,7 @@ namespace OkaneGames.AnythingBookmark.Editor
                 ChangeBackgroundColor(Color.magenta);
                 var style = new GUIStyle(GUI.skin.button);
                 style.alignment = TextAnchor.MiddleLeft;
-                if (GUILayout.Button(new GUIContent(bookmark.path, $"Saved values are reflected in SceneViewCamera."), style, GetMaxWidth(68)))
+                if (GUILayout.Button(new GUIContent(bookmark.path, "Saved values are reflected in SceneViewCamera."), style, GetMaxWidth(68)))
                 {
                     OnClickBookmarkCommon(bookmark);
                     var sceneViewCamera = JsonUtility.FromJson<SceneViewCamera>(bookmark.serialized);
@@ -569,18 +570,18 @@ namespace OkaneGames.AnythingBookmark.Editor
                     var go = FindGameObjectBySpecialPath(bookmark.path, SeparatorForSpecialPath);
                     // ヒエラルキー上のゲームオブジェクトだけ PingObject が反応したりしなかったりする。最小構成でも起きたのでUnity側のバグ？
                     if (go != null) EditorGUIUtility.PingObject(go);
-                    else Debug.Log($"[{WindowTitle}] Not found GameObject in Hierarchy. Path:{bookmark.path}");
+                    else Debug.Log("[" + WindowTitle + "] Not found GameObject in Hierarchy. Path:" + bookmark.path);
                 }
 
                 ChangeBackgroundColor(Color.red);
                 var style = new GUIStyle(GUI.skin.button);
                 style.alignment = TextAnchor.MiddleLeft;
-                if (GUILayout.Button(new GUIContent(bookmark.path, $"{bookmark.path}\n\nSelect gameObject."), style, GetMaxWidth()))
+                if (GUILayout.Button(new GUIContent(bookmark.path, bookmark.path + "\n\nSelect gameObject."), style, GetMaxWidth()))
                 {
                     OnClickBookmarkCommon(bookmark);
                     var go = FindGameObjectBySpecialPath(bookmark.path, SeparatorForSpecialPath);
                     if (go != null) Selection.activeGameObject = go;
-                    else Debug.Log($"[{WindowTitle}] Not found GameObject in Hierarchy. Path:{bookmark.path}");
+                    else Debug.Log("[" + WindowTitle + "] Not found GameObject in Hierarchy. Path:" + bookmark.path);
                 }
                 ReturnBackgroundColor();
             }
@@ -633,13 +634,13 @@ namespace OkaneGames.AnythingBookmark.Editor
 
                 // セーブデータ全削除
                 ChangeBackgroundColor(Color.red);
-                if (GUILayout.Button(new GUIContent("Remove All Save Data", $"Remove all {WindowTitle} related save data.")))
+                if (GUILayout.Button(new GUIContent("Remove All Save Data", "Remove all " + WindowTitle + " related save data.")))
                 {
                     if (EditorUtility.DisplayDialog("Final Confirmation", "Are you sure you want me to remove it?", "Remove", "Cancel"))
                     {
                         RemoveAllSaveData();
                         // 一応ダイアログ出してから終了
-                        if (EditorUtility.DisplayDialog("Remove Result", $"Successed!!\n\nExit {WindowTitle}.", "OK")) Close();
+                        if (EditorUtility.DisplayDialog("Remove Result", "Successed!!\n\nExit " + WindowTitle + ".", "OK")) Close();
                     }
                 }
                 ReturnBackgroundColor();
@@ -704,7 +705,7 @@ namespace OkaneGames.AnythingBookmark.Editor
                     message += "When sharing exported data with others, please be careful that your bookmarked path does not contain any personal information.";
                     message += "\n\nBecause AnythingBookmark uses the GUID of the Asset to process bookmarks, it may not work depending on the configuration of the project to which you are importing the bookmarks.";
                     // DisplayDialogの内容はコピペできないので翻訳サイトにかけたい人用にログも出力、ダイアログを閉じないとログ出力されないのは最悪なので今後の課題
-                    Debug.Log($"[{WindowTitle}] {message}");
+                    Debug.Log("[" + WindowTitle + "] " + message);
                     if (EditorUtility.DisplayDialog("Notice", message, "OK"))
                     {
                     }
@@ -717,9 +718,9 @@ namespace OkaneGames.AnythingBookmark.Editor
                     {
                         string json = JsonUtility.ToJson(new SerializableBookmarkList(_MainBookmarkList));
                         File.WriteAllText(path, json, System.Text.Encoding.UTF8);
-                        Debug.Log($"[{WindowTitle}] Export succeeded. path:{path}");
+                        Debug.Log("[" + WindowTitle + "] Export succeeded. path:" + path);
                         // エクスポート後にフォルダを開くか確認
-                        if (EditorUtility.DisplayDialog("Export Result", $"Successed!!\n\nOpen {path}?", "Open", "Cancel"))
+                        if (EditorUtility.DisplayDialog("Export Result", "Successed!!\n\nOpen " + path + "?", "Open", "Cancel"))
                         {
                             EditorUtility.RevealInFinder(path);
                         }
@@ -747,7 +748,7 @@ namespace OkaneGames.AnythingBookmark.Editor
             {
                 // インポート前にエクスポートしたか確認
                 var message = "It will be added to the current bookmark data.\nWe recommend exporting before importing.\n\nWould you like to continue?";
-                Debug.Log($"[{WindowTitle}] {message}");
+                Debug.Log("[" + WindowTitle + "] " + message);
                 if (EditorUtility.DisplayDialog("Confirmation", message, "Continue", "Cancel"))
                 {
                     var path = EditorUtility.OpenFilePanel("", "", "abd");
@@ -760,7 +761,7 @@ namespace OkaneGames.AnythingBookmark.Editor
                             // 何かしらで失敗
                             if (serializableBookmarkList == null)
                             {
-                                Debug.LogWarning($"[{WindowTitle}] Import failed. path:{path}");
+                                Debug.LogWarning("[" + WindowTitle + "] Import failed. path:" + path);
                             }
                             // 成功
                             else
@@ -771,8 +772,8 @@ namespace OkaneGames.AnythingBookmark.Editor
                                     // 警告は出すけど何もしない
                                     if (_Setting.IsShowDifferentProjectGuidNoticeWhenImport)
                                     {
-                                        message = $"Data with a different ProjectGUID has been imported.\nAssets-related bookmarks may not work properly.";
-                                        Debug.Log($"[{WindowTitle}] {message}");
+                                        message = "Data with a different ProjectGUID has been imported.\nAssets-related bookmarks may not work properly.";
+                                        Debug.Log("[" + WindowTitle + "] " + message);
                                         if (EditorUtility.DisplayDialog("ProjectGUID Notice", message, "OK"))
                                         {
                                         }
@@ -790,9 +791,9 @@ namespace OkaneGames.AnythingBookmark.Editor
                                 }
                                 SaveBookmarkList();
 
-                                Debug.Log($"[{WindowTitle}] Import successed. path:{path}");
+                                Debug.Log("[" + WindowTitle + "] Import successed. path:" + path);
                                 // 再起動
-                                if (EditorUtility.DisplayDialog("Import Result", $"Successed!!\n\nReboot {WindowTitle}.", "OK"))
+                                if (EditorUtility.DisplayDialog("Import Result", "Successed!!\n\nReboot " + WindowTitle + ".", "OK"))
                                 {
                                     Close();
                                     CreateWindow();
@@ -814,7 +815,7 @@ namespace OkaneGames.AnythingBookmark.Editor
             {
                 // インポート前にエクスポートしたか確認
                 var message = "The current bookmark data will be lost when importing.\nWe recommend exporting before importing.\n\nWould you like to continue?";
-                Debug.Log($"[{WindowTitle}] {message}");
+                Debug.Log("[" + WindowTitle + "] " + message);
                 if (EditorUtility.DisplayDialog("Confirmation", message, "Continue", "Cancel"))
                 {
                     var path = EditorUtility.OpenFilePanel("", "", "abd");
@@ -827,7 +828,7 @@ namespace OkaneGames.AnythingBookmark.Editor
                             // 何かしらで失敗
                             if (serializableBookmarkList == null)
                             {
-                                Debug.LogWarning($"[{WindowTitle}] Import failed. path:{path}");
+                                Debug.LogWarning("[" + WindowTitle + "] Import failed. path:" + path);
                             }
                             // 成功
                             else
@@ -836,8 +837,8 @@ namespace OkaneGames.AnythingBookmark.Editor
                                 if (serializableBookmarkList.Guid != PlayerSettings.productGUID.ToString())
                                 {
                                     // 警告は出すけど何もしない
-                                    message = $"Data with a different ProjectGUID has been imported.\nAssets-related bookmarks may not work properly.";
-                                    Debug.Log($"[{WindowTitle}] {message}");
+                                    message = "Data with a different ProjectGUID has been imported.\nAssets-related bookmarks may not work properly.";
+                                    Debug.Log("[" + WindowTitle + "] " + message);
                                     if (EditorUtility.DisplayDialog("ProjectGUID Notice", message, "OK"))
                                     {
                                     }
@@ -847,9 +848,9 @@ namespace OkaneGames.AnythingBookmark.Editor
                                 _mainBookmarkList = serializableBookmarkList.List;
                                 SaveBookmarkList();
 
-                                Debug.Log($"[{WindowTitle}] Import successed. path:{path}");
+                                Debug.Log("[" + WindowTitle + "] Import successed. path:" + path);
                                 // 再起動
-                                if (EditorUtility.DisplayDialog("Import Result", $"Successed!!\n\nReboot {WindowTitle}.", "OK"))
+                                if (EditorUtility.DisplayDialog("Import Result", "Successed!!\n\nReboot " + WindowTitle + ".", "OK"))
                                 {
                                     Close();
                                     CreateWindow();
@@ -919,7 +920,7 @@ namespace OkaneGames.AnythingBookmark.Editor
             // セパレーター有りは再帰で処理
             var paths = path.Split(separator.ToCharArray());
             var rootGameObject = FindRootGameObject(paths[0]);
-            var result = FindTransformRecursively(rootGameObject?.transform, 1, paths);
+            var result = FindTransformRecursively(rootGameObject == null? null: rootGameObject.transform, 1, paths);
             return result == null ? null : result.gameObject;
         }
         private GameObject FindRootGameObject(string name)
@@ -951,7 +952,7 @@ namespace OkaneGames.AnythingBookmark.Editor
         {
             if (Selection.assetGUIDs.Length <= 0)
             {
-                Debug.Log($"[{WindowTitle}] No assets selected in ProjectView.");
+                Debug.Log("[" + WindowTitle + "] No assets selected in ProjectView.");
                 return;
             }
 
@@ -1712,7 +1713,18 @@ namespace OkaneGames.AnythingBookmark.Editor
             }
 
             // 起動時にExecuteが呼ばれたかどうか
-            public bool WasCalledExecuteOnStartup { get; set; } = false;
+            private bool _wasCalledExecuteOnStartup = false;
+            public bool WasCalledExecuteOnStartup
+            {
+                get
+                {
+                    return _wasCalledExecuteOnStartup;
+                }
+                set
+                {
+                    _wasCalledExecuteOnStartup = value;
+                }
+            }
 
             private string[] _displayNames;
             public string[] DisplayNames
@@ -1909,38 +1921,38 @@ namespace OkaneGames.AnythingBookmark.Editor
                 var t = bookmark.objectType;
 
                 // 全体的に判定が厳密すぎるからもっとアバウトでもいいかも
-                if (m.HasFlag(Id.DefaultAsset)) if (t == "UnityEditor.DefaultAsset") return true;
-                if (m.HasFlag(Id.MonoScript)) if (t == "UnityEditor.MonoScript") return true;
-                if (m.HasFlag(Id.SceneRelated))
+                if (HasBitFlag(m, Id.DefaultAsset)) if (t == "UnityEditor.DefaultAsset") return true;
+                if (HasBitFlag(m, Id.MonoScript)) if (t == "UnityEditor.MonoScript") return true;
+                if (HasBitFlag(m, Id.SceneRelated))
                 {
                     if (t == "UnityEditor.SceneAsset" || t == "UnityEditor.SceneTemplate.SceneTemplateAsset") return true;
                 }
-                if (m.HasFlag(Id.GameObject)) if (t == "UnityEngine.GameObject") return true;
-                if (m.HasFlag(Id.TextAsset)) if (t == "UnityEngine.TextAsset") return true;
-                if (m.HasFlag(Id.Font)) if (t == "UnityEngine.Font") return true;
-                if (m.HasFlag(Id.TextureRelated))
+                if (HasBitFlag(m, Id.GameObject)) if (t == "UnityEngine.GameObject") return true;
+                if (HasBitFlag(m, Id.TextAsset)) if (t == "UnityEngine.TextAsset") return true;
+                if (HasBitFlag(m, Id.Font)) if (t == "UnityEngine.Font") return true;
+                if (HasBitFlag(m, Id.TextureRelated))
                 {
                     if (t == "UnityEngine.Texture2D" || t == "UnityEngine.Texture" || t == "UnityEngine.RenderTexture"
                         || t == "UnityEngine.CustomRenderTexture" || t == "UnityEngine.U2D.SpriteAtlas") return true;
                 }
-                if (m.HasFlag(Id.Material)) if (t == "UnityEngine.Material") return true;
-                if (m.HasFlag(Id.ShaderRelated))
+                if (HasBitFlag(m, Id.Material)) if (t == "UnityEngine.Material") return true;
+                if (HasBitFlag(m, Id.ShaderRelated))
                 {
                     if (t == "UnityEngine.Shader" || t == "UnityEditor.ShaderInclude"
                         || t == "UnityEngine.ShaderVariantCollection") return true;
                 }
-                if (m.HasFlag(Id.AudioRelated))
+                if (HasBitFlag(m, Id.AudioRelated))
                 {
                     if (t == "UnityEngine.AudioClip" || t == "UnityEditor.Audio.AudioMixerController") return true;
                 }
-                if (m.HasFlag(Id.AnimationRelated))
+                if (HasBitFlag(m, Id.AnimationRelated))
                 {
                     if (t == "UnityEngine.AnimationClip" || t == "UnityEditor.Animations.AnimatorController"
                         || t == "UnityEngine.AnimatorOverrideController" || t == "UnityEngine.AvatarMask") return true;
                 }
-                if (m.HasFlag(Id.Timeline)) if (t == "UnityEngine.Timeline.TimelineAsset") return true;
-                if (m.HasFlag(Id.VideoClip)) if (t == "UnityEngine.Video.VideoClip") return true;
-                if (m.HasFlag(Id.Others))
+                if (HasBitFlag(m, Id.Timeline)) if (t == "UnityEngine.Timeline.TimelineAsset") return true;
+                if (HasBitFlag(m, Id.VideoClip)) if (t == "UnityEngine.Video.VideoClip") return true;
+                if (HasBitFlag(m, Id.Others))
                 {
                     // Everything (-1) を渡し、上記判定を再度行い false が返ってきたら全ての条件に引っかかってないので反転して true を返す
                     if (!forJudjeOthers) return !IsAddableBookmark(-1, bookmark, true);
@@ -1949,7 +1961,7 @@ namespace OkaneGames.AnythingBookmark.Editor
 
                 return false;
             }
-            
+
             // 32bit分いけるけど実際32個も表示したら操作がだるいのである程度厳選する
             public enum Id
             {
@@ -1967,6 +1979,11 @@ namespace OkaneGames.AnythingBookmark.Editor
                 Timeline = 1 << 11,
                 VideoClip = 1 << 12,
                 Others = 1 << 13,
+            
+            }
+            private static bool HasBitFlag(Id value, Id flag)
+            {
+                return (value & flag) == flag;
             }
         }
 
@@ -1974,7 +1991,7 @@ namespace OkaneGames.AnythingBookmark.Editor
         /// <summary>
         /// ポップアップ入力用クラス（ほぼ↓の通りで★部分だけちょっと改造）
         /// https://light11.hatenadiary.com/entry/2020/02/10/211326
-        /// デフォルト値即Enterは反映、Esc終了は未反映、範囲外クリックも未反映
+        /// デフォルト値即Enterは反映、Esc終了は未反映、範囲外クリックも未反映、C#4.0対応
         /// </summary>
         private class TextFieldPopup : PopupWindowContent
         {
@@ -2031,7 +2048,8 @@ namespace OkaneGames.AnythingBookmark.Editor
                     CloseFromKeyboard("");
                 }
 
-                var textFieldName = $"{GetType().Name}{nameof(_text)}";
+                //var textFieldName = $"{GetType().Name}{nameof(_text)}";
+                var textFieldName = "{" + GetType().Name + "}{_text}";
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     GUILayout.Space(WINDOW_PADDING);
@@ -2046,7 +2064,7 @@ namespace OkaneGames.AnythingBookmark.Editor
                             _text = EditorGUILayout.TextField(_text);
                             if (ccs.changed)
                             {
-                                _changed?.Invoke(_text);
+                                if (_changed != null) _changed.Invoke(_text);
                             }
                         }
                     }
@@ -2063,17 +2081,23 @@ namespace OkaneGames.AnythingBookmark.Editor
             // ★キーボードから閉じる
             private void CloseFromKeyboard(string text)
             {
-                if (!string.IsNullOrEmpty(text)) _changed?.Invoke(text);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    if(_changed != null) _changed.Invoke(text);
+                }
                 editorWindow.Close();
             }
 
             public override void OnClose()
             {
-                _closed?.Invoke();
+                if(_closed != null) _closed.Invoke();
                 base.OnClose();
             }
 
-            public override Vector2 GetWindowSize() => _windowSize;
+            public override Vector2 GetWindowSize()
+            {
+                return _windowSize;
+            }
         }
 
 
