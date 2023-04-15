@@ -876,14 +876,18 @@ namespace OkaneGames.AnythingBookmark.Editor
             EditorGUILayout.Space();
             GUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField("Copyright (c) 2023 OkaneGames / zenigane");
+                EditorGUILayout.LabelField("(C) 2023 OkaneGames / zenigane");
+                if (GUILayout.Button(new GUIContent("GitHub", ""), GUILayout.Width(50)))
+                {
+                    Application.OpenURL("https://github.com/zenigane138");
+                }
                 if (GUILayout.Button(new GUIContent("Blog", ""), GUILayout.Width(35)))
                 {
-                    Application.OpenURL("https://google.com");
+                    Application.OpenURL("https://zenigane138.hateblo.jp/?from=ab1");
                 }
                 if (GUILayout.Button(new GUIContent("Twitter", ""), GUILayout.Width(55)))
                 {
-                    Application.OpenURL("https://google.com");
+                    Application.OpenURL("https://twitter.com/zenigane138");
                 }
             }
             GUILayout.EndHorizontal();
