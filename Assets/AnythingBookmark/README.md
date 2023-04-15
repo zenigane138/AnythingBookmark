@@ -7,7 +7,12 @@ Overview
 --------
 AnythingBookmark is an editor extension window that allows you to bookmark not only Unity assets but also various elements.  
 
-https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-b06e-f3053e5a24b4.mp4
+![](https://img.shields.io/badge/Unity-2017.1%20or%20later-lightgrey)
+[![](https://img.shields.io/badge/license-MIT-orange)](https://github.com/zenigane138/AnythingBookmark/blob/main/LICENSE.md)
+[![](https://img.shields.io/badge/readme-%E6%97%A5%E6%9C%AC%E8%AA%9E%E7%89%88-red)](/README_ja.md)
+[![](https://img.shields.io/badge/Follow-FFFFFF.svg?logo=twitter&style=flat)](https://twitter.com/intent/follow?screen_name=zenigane138)
+
+![image](https://user-images.githubusercontent.com/36072156/232230899-52835490-8a8b-4ad8-8c1d-b2d1a5d78a67.png)
 
 Elements that can be bookmarked
 -------------------------------
@@ -27,7 +32,11 @@ Features
 - Sort and filter
 - Export/import bookmark data (.abd)
 
-System Requirements
+Video
+---
+https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-b06e-f3053e5a24b4.mp4
+
+Requirement
 -------------------
 - Required
   - Unity 2017.1 or later

@@ -6,7 +6,12 @@ The English version of README.md is available [here](/README.md).
 ---
 AnythingBookmark は Unity のアセットだけでなく様々な要素をブックマーク出来るエディタ拡張ウィンドウです。  
 
-https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-b06e-f3053e5a24b4.mp4
+![](https://img.shields.io/badge/Unity-2017.1%20or%20later-lightgrey)
+[![](https://img.shields.io/badge/license-MIT-orange)](https://github.com/zenigane138/AnythingBookmark/blob/main/LICENSE.md)
+[![](https://img.shields.io/badge/readme-English-red)](/README_ja.md)
+[![](https://img.shields.io/badge/Follow-FFFFFF.svg?logo=twitter&style=flat)](https://twitter.com/intent/follow?screen_name=zenigane138)
+
+![image](https://user-images.githubusercontent.com/36072156/232230899-52835490-8a8b-4ad8-8c1d-b2d1a5d78a67.png)
 
 登録可能な要素
 ---
@@ -25,6 +30,10 @@ https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-
 - ブックマークの種類別のタブ
 - ソートやフィルタ
 - ブックマークデータ(.abd)のエクスポート/インポート機能
+
+動画  
+---
+https://user-images.githubusercontent.com/36072156/232078688-7189e87f-be92-434d-b06e-f3053e5a24b4.mp4
 
 動作環境
 ---
