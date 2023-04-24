@@ -9,6 +9,7 @@ AnythingBookmark は Unity のアセットだけでなく様々な要素をブ�
 ![](https://img.shields.io/badge/Unity-2017.1%20or%20later-lightgrey)
 [![](https://img.shields.io/badge/license-MIT-orange)](https://github.com/zenigane138/AnythingBookmark/blob/main/LICENSE.md)
 [![](https://img.shields.io/badge/readme-English-red)](/README_ja.md)
+[![openupm](https://img.shields.io/npm/v/com.okanegames.anythingbookmark?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.okanegames.anythingbookmark/)
 [![](https://img.shields.io/badge/Follow-FFFFFF.svg?logo=twitter&style=flat)](https://twitter.com/intent/follow?screen_name=zenigane138)
 
 ![image](https://user-images.githubusercontent.com/36072156/232230899-52835490-8a8b-4ad8-8c1d-b2d1a5d78a67.png)
